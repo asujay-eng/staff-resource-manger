@@ -321,36 +321,30 @@ export default function StaffForm() {
               />
             </div>
              <div>
-          <label>Countries Worked</label>
+              <label>Countries Worked</label>
 
-            {countriesWorked.map((country, index) => (
-            <div key={index} style={{ display: "flex", gap: "8px" }}>
-            <input
-            list="country-list"
-            value={country}
-            onChange={(e) =>
-              updateCountry(index, e.target.value)
-            }
+              {countriesWorked.map((country, index) => (
+              <div key={index} style={{ display: "flex", gap: "8px" }}>
+                <input
+                  list="country-list"
+                  value={country}
+                  onChange={(e) =>
+                  updateCountry(index, e.target.value)}
             placeholder="Start typing country..."
             />
 
             {countriesWorked.length > 1 && (
-              <button
-              type="button"
-            onClick={() => removeCountry(index)}
-            >
+              <button type="button" onClick={() => removeCountry(index)} >
                 ❌
               </button>
-          )}
-        </div>
+              )}
+            </div>
           ))}
 
-          <button
-          type="button"
-          onClick={addCountry}
-          >
+            <button   type="button" onClick={addCountry}>
         + Add Country
-    </button>
+          </button>
+        </div>
         <div className="card">
           <h2>Skills & Experience</h2>
 
