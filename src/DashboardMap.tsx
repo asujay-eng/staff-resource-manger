@@ -106,11 +106,57 @@ export default function DashboardMap() {
         Staff distribution based on town and country
       </p>
 
-      <div className="card">
-        <h2>Summary</h2>
-        <p>Total Staff: {staff.length}</p>
-        <p>Mapped Staff: {markers.length}</p>
-      </div>
+      <div className="dashboard-grid">
+  <div className="stat-card">
+    <h3>Total Staff</h3>
+    <p>{staff.length}</p>
+  </div>
+
+  <div className="stat-card">
+    <h3>Available Staff</h3>
+    <p>
+      {staff.filter((s) => s.availability === "Available").length}
+    </p>
+  </div>
+
+  <div className="stat-card">
+    <h3>Allocated Staff</h3>
+    <p>
+      {staff.filter((s) => s.availability === "Allocated").length}
+    </p>
+  </div>
+
+  <div className="stat-card">
+    <h3>Countries Covered</h3>
+    <p>
+      {
+        new Set(
+          staff
+            .map((s) => s.country)
+            .filter(Boolean)
+        ).size
+      }
+    </p>
+  </div>
+
+  <div className="stat-card">
+    <h3>Disciplines Covered</h3>
+    <p>
+      {
+        new Set(
+          staff
+            .map((s) => s.main_discipline)
+            .filter(Boolean)
+        ).size
+      }
+    </p>
+  </div>
+
+  <div className="stat-card">
+    <h3>Mapped Staff</h3>
+    <p>{markers.length}</p>
+  </div>
+</div>
 
       <div className="card">
         <GoogleMap
