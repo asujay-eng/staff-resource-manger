@@ -321,7 +321,7 @@ export default function StaffForm() {
               />
             </div>
              <div>
-          <<label>Countries Worked</label>
+          <label>Countries Worked</label>
 
             {countriesWorked.map((country, index) => (
             <div key={index} style={{ display: "flex", gap: "8px" }}>
