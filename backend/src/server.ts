@@ -192,6 +192,7 @@ app.get("/api/setup", async (_, res) => {
         phases TEXT[],
         roles TEXT[],
         projects TEXT[],
+        countries_worked TEXT[],
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
