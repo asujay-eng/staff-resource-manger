@@ -339,42 +339,43 @@ export default function StaffForm() {
       </select>
     </div>
 
-    <div className="full-width">
-      <label>Countries Worked</label>
+  <div className="full-width">
+  <label>Countries Worked</label>
 
-      {countriesWorked.map((country, index) => (
-        <div
-          key={index}
-          style={{
-            display: "flex",
-            gap: "8px",
-            marginBottom: "8px"
-          }}
-        >
-          <input
-            list="country-list"
-            value={country}
-            onChange={(e) =>
-              updateCountry(index, e.target.value)
-            }
-            placeholder="Start typing country..."
-          />
+  {countriesWorked.map((country, index) => (
+    <div
+      key={index}
+      className="country-worked-row"
+    >
+      <input
+        list="country-list"
+        value={country}
+        onChange={(e) =>
+          updateCountry(index, e.target.value)
+        }
+        placeholder="Start typing country..."
+      />
 
-          {countriesWorked.length > 1 && (
-            <button
-              type="button"
+        {countriesWorked.length > 1 && (
+          <button
+            type="button"
+              className="remove-country-btn"
               onClick={() => removeCountry(index)}
-            >
-              ❌
-            </button>
-          )}
-        </div>
-      ))}
+              >
+              Remove
+              </button>
+            )}
+          </div>
+            ))}
 
-      <button type="button" onClick={addCountry}>
-        + Add Country
-      </button>
-    </div>
+        <button
+            type="button"
+            className="add-country-btn"
+            onClick={addCountry}
+          >
+          + Add Country
+        </button>
+</div>
   </div>
 </div>
         <div className="card">
