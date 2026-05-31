@@ -254,18 +254,7 @@ export default function StaffForm() {
             </div>
           </div>
         </div>
-        <div>
-          <label>Countries Worked</label>
-
-          <input
-            list="country-list"
-            value={form.countriesWorked}
-            onChange={(e) =>
-            updateField("countriesWorked", e.target.value)
-              }
-          placeholder="United Arab Emirates, Saudi Arabia, United Kingdom"
-          />
-        </div>
+       
         <div className="card">
           <h2>Professional Information</h2>
 
@@ -314,7 +303,18 @@ export default function StaffForm() {
                 onChange={(e) => updateField("grade", e.target.value)}
               />
             </div>
+             <div>
+          <label>Countries Worked</label>
 
+          <input
+            list="country-list"
+            value={form.countriesWorked}
+            onChange={(e) =>
+            updateField("countriesWorked", e.target.value)
+              }
+          placeholder="United Arab Emirates, Saudi Arabia, United Kingdom"
+          />
+            </div>
             <div>
               <label>Availability</label>
               <select
