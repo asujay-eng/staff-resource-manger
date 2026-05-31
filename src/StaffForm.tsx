@@ -140,7 +140,9 @@ export default function StaffForm() {
       <p className="subtitle">
         Enter staff member details below
       </p>
-
+      <p style={{ textAlign: "center", color: "red" }}>
+      Loaded disciplines: {mainDisciplines.length}
+      </p>
       <form onSubmit={submitForm}>
         <div className="card">
           <h2>Personal Information</h2>
