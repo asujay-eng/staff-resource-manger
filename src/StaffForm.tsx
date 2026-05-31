@@ -6,6 +6,7 @@ const API_URL = "https://staff-resource-api-production.up.railway.app";
 export default function StaffForm() {
   const [mainDisciplines, setMainDisciplines] = useState<any[]>([]);
   const [subDisciplines, setSubDisciplines] = useState<any[]>([]);
+  const [countries, setCountries] = useState<any[]>([]);
 
   const [form, setForm] = useState({
     employeeNumber: "",
@@ -31,12 +32,17 @@ export default function StaffForm() {
 
   useEffect(() => {
     loadMainDisciplines();
+    loadCountries();
   }, []);
 
   async function loadMainDisciplines() {
-    const response = await fetch(`${API_URL}/api/main-disciplines`);
-    const data = await response.json();
-    setMainDisciplines(data);
+    try {
+      const response = await fetch(`${API_URL}/api/main-disciplines`);
+      const data = await response.json();
+      setMainDisciplines(data);
+    } catch (error) {
+      console.error("Failed to load main disciplines", error);
+    }
   }
 
   async function loadSubDisciplines(mainDisciplineId: string) {
@@ -45,12 +51,25 @@ export default function StaffForm() {
       return;
     }
 
-    const response = await fetch(
-      `${API_URL}/api/sub-disciplines/${mainDisciplineId}`
-    );
+    try {
+      const response = await fetch(
+        `${API_URL}/api/sub-disciplines/${mainDisciplineId}`
+      );
+      const data = await response.json();
+      setSubDisciplines(data);
+    } catch (error) {
+      console.error("Failed to load sub disciplines", error);
+    }
+  }
 
-    const data = await response.json();
-    setSubDisciplines(data);
+  async function loadCountries() {
+    try {
+      const response = await fetch(`${API_URL}/api/countries`);
+      const data = await response.json();
+      setCountries(data);
+    } catch (error) {
+      console.error("Failed to load countries", error);
+    }
   }
 
   function updateField(name: string, value: string) {
@@ -125,7 +144,7 @@ export default function StaffForm() {
 
         setSubDisciplines([]);
       } else {
-        setMessage(`❌ ${data.error || "Failed to save record"}`);
+        setMessage(`❌ ${data.error || data.details || "Failed to save record"}`);
       }
     } catch (error) {
       console.error(error);
@@ -140,9 +159,12 @@ export default function StaffForm() {
       <p className="subtitle">
         Enter staff member details below
       </p>
+
       <p style={{ textAlign: "center", color: "red" }}>
-      Loaded disciplines: {mainDisciplines.length}
+        Loaded disciplines: {mainDisciplines.length} | Loaded countries:{" "}
+        {countries.length}
       </p>
+
       <form onSubmit={submitForm}>
         <div className="card">
           <h2>Personal Information</h2>
@@ -163,9 +185,7 @@ export default function StaffForm() {
               <input
                 required
                 value={form.calledName}
-                onChange={(e) =>
-                  updateField("calledName", e.target.value)
-                }
+                onChange={(e) => updateField("calledName", e.target.value)}
               />
             </div>
 
@@ -174,9 +194,7 @@ export default function StaffForm() {
               <input
                 required
                 value={form.firstName}
-                onChange={(e) =>
-                  updateField("firstName", e.target.value)
-                }
+                onChange={(e) => updateField("firstName", e.target.value)}
               />
             </div>
 
@@ -185,9 +203,7 @@ export default function StaffForm() {
               <input
                 required
                 value={form.surname}
-                onChange={(e) =>
-                  updateField("surname", e.target.value)
-                }
+                onChange={(e) => updateField("surname", e.target.value)}
               />
             </div>
 
@@ -196,9 +212,7 @@ export default function StaffForm() {
               <input
                 type="email"
                 value={form.email}
-                onChange={(e) =>
-                  updateField("email", e.target.value)
-                }
+                onChange={(e) => updateField("email", e.target.value)}
               />
             </div>
 
@@ -206,29 +220,32 @@ export default function StaffForm() {
               <label>Mobile</label>
               <input
                 value={form.mobile}
-                onChange={(e) =>
-                  updateField("mobile", e.target.value)
-                }
+                onChange={(e) => updateField("mobile", e.target.value)}
               />
             </div>
 
             <div>
               <label>Country</label>
+
               <input
+                list="country-list"
                 value={form.country}
-                onChange={(e) =>
-                  updateField("country", e.target.value)
-                }
+                onChange={(e) => updateField("country", e.target.value)}
+                placeholder="Start typing country..."
               />
+
+              <datalist id="country-list">
+                {countries.map((country) => (
+                  <option key={country.id} value={country.name} />
+                ))}
+              </datalist>
             </div>
 
             <div>
               <label>Town</label>
               <input
                 value={form.town}
-                onChange={(e) =>
-                  updateField("town", e.target.value)
-                }
+                onChange={(e) => updateField("town", e.target.value)}
               />
             </div>
           </div>
@@ -262,9 +279,7 @@ export default function StaffForm() {
               <label>Sub Discipline</label>
               <select
                 value={form.subDiscipline}
-                onChange={(e) =>
-                  updateField("subDiscipline", e.target.value)
-                }
+                onChange={(e) => updateField("subDiscipline", e.target.value)}
                 disabled={!form.mainDiscipline}
               >
                 <option value="">Select Sub Discipline</option>
@@ -281,9 +296,7 @@ export default function StaffForm() {
               <label>Grade / Level</label>
               <input
                 value={form.grade}
-                onChange={(e) =>
-                  updateField("grade", e.target.value)
-                }
+                onChange={(e) => updateField("grade", e.target.value)}
               />
             </div>
 
@@ -291,9 +304,7 @@ export default function StaffForm() {
               <label>Availability</label>
               <select
                 value={form.availability}
-                onChange={(e) =>
-                  updateField("availability", e.target.value)
-                }
+                onChange={(e) => updateField("availability", e.target.value)}
               >
                 <option value="Available">Available</option>
                 <option value="Allocated">Allocated</option>
@@ -312,9 +323,7 @@ export default function StaffForm() {
               <textarea
                 placeholder="AutoCAD, BIM, Project Management"
                 value={form.skills}
-                onChange={(e) =>
-                  updateField("skills", e.target.value)
-                }
+                onChange={(e) => updateField("skills", e.target.value)}
               />
             </div>
 
@@ -323,9 +332,7 @@ export default function StaffForm() {
               <textarea
                 placeholder="Rail, Metro, Highway"
                 value={form.industries}
-                onChange={(e) =>
-                  updateField("industries", e.target.value)
-                }
+                onChange={(e) => updateField("industries", e.target.value)}
               />
             </div>
 
@@ -334,9 +341,7 @@ export default function StaffForm() {
               <textarea
                 placeholder="Feasibility, Design, Construction"
                 value={form.phases}
-                onChange={(e) =>
-                  updateField("phases", e.target.value)
-                }
+                onChange={(e) => updateField("phases", e.target.value)}
               />
             </div>
 
@@ -345,9 +350,7 @@ export default function StaffForm() {
               <textarea
                 placeholder="Engineer, Lead Designer, Project Manager"
                 value={form.roles}
-                onChange={(e) =>
-                  updateField("roles", e.target.value)
-                }
+                onChange={(e) => updateField("roles", e.target.value)}
               />
             </div>
 
@@ -356,9 +359,7 @@ export default function StaffForm() {
               <textarea
                 placeholder="Crossrail, Dubai Metro, Etihad Rail"
                 value={form.projects}
-                onChange={(e) =>
-                  updateField("projects", e.target.value)
-                }
+                onChange={(e) => updateField("projects", e.target.value)}
               />
             </div>
           </div>
@@ -368,11 +369,7 @@ export default function StaffForm() {
           Save Staff Details
         </button>
 
-        {message && (
-          <div className="message">
-            {message}
-          </div>
-        )}
+        {message && <div className="message">{message}</div>}
       </form>
     </div>
   );
