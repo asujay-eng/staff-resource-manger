@@ -197,7 +197,7 @@ export default function ResourceManager() {
             Add
           </button>
         </form>
-
+      
         <table className="admin-table">
           <thead>
             <tr>
@@ -209,7 +209,12 @@ export default function ResourceManager() {
           </thead>
 
           <tbody>
-            {mainDisciplines.map((item) => (
+            {mainDisciplines.length === 0 && (
+              <tr>
+              <td colSpan={4}>No main disciplines found.</td>
+              </tr>
+              )}
+              {mainDisciplines.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.name}</td>
