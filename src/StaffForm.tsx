@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./StaffForm.css";
 
 const API_URL = "https://staff-resource-api-production.up.railway.app";
 
 export default function StaffForm() {
+  const [mainDisciplines, setMainDisciplines] = useState<any[]>([]);
+  const [subDisciplines, setSubDisciplines] = useState<any[]>([]);
+
   const [form, setForm] = useState({
     employeeNumber: "",
     calledName: "",
@@ -26,25 +29,59 @@ export default function StaffForm() {
 
   const [message, setMessage] = useState("");
 
-  const updateField = (name: string, value: string) => {
+  useEffect(() => {
+    loadMainDisciplines();
+  }, []);
+
+  async function loadMainDisciplines() {
+    const response = await fetch(`${API_URL}/api/main-disciplines`);
+    const data = await response.json();
+    setMainDisciplines(data);
+  }
+
+  async function loadSubDisciplines(mainDisciplineId: string) {
+    if (!mainDisciplineId) {
+      setSubDisciplines([]);
+      return;
+    }
+
+    const response = await fetch(
+      `${API_URL}/api/sub-disciplines/${mainDisciplineId}`
+    );
+
+    const data = await response.json();
+    setSubDisciplines(data);
+  }
+
+  function updateField(name: string, value: string) {
     setForm({
       ...form,
       [name]: value
     });
-  };
+  }
 
-  const splitValues = (value: string) => {
+  function splitValues(value: string) {
     return value
       .split(",")
       .map((item) => item.trim())
       .filter(Boolean);
-  };
+  }
 
-  const submitForm = async (e: React.FormEvent) => {
+  async function submitForm(e: React.FormEvent) {
     e.preventDefault();
+
+    const selectedMain = mainDisciplines.find(
+      (d) => String(d.id) === form.mainDiscipline
+    );
+
+    const selectedSub = subDisciplines.find(
+      (d) => String(d.id) === form.subDiscipline
+    );
 
     const payload = {
       ...form,
+      mainDiscipline: selectedMain ? selectedMain.name : form.mainDiscipline,
+      subDiscipline: selectedSub ? selectedSub.name : form.subDiscipline,
       skills: splitValues(form.skills),
       industries: splitValues(form.industries),
       phases: splitValues(form.phases),
@@ -85,6 +122,8 @@ export default function StaffForm() {
           roles: "",
           projects: ""
         });
+
+        setSubDisciplines([]);
       } else {
         setMessage(`❌ ${data.error || "Failed to save record"}`);
       }
@@ -92,7 +131,7 @@ export default function StaffForm() {
       console.error(error);
       setMessage("❌ Unable to connect to server");
     }
-  };
+  }
 
   return (
     <div className="container">
@@ -197,66 +236,43 @@ export default function StaffForm() {
           <h2>Professional Information</h2>
 
           <div className="grid4">
-          <div>
-  <label>Main Discipline</label>
-  <select
-    value={form.mainDiscipline}
-    onChange={(e) =>
-      updateField("mainDiscipline", e.target.value)
-    }
-  >
-    <option value="">Select Discipline</option>
+            <div>
+              <label>Main Discipline</label>
+              <select
+                value={form.mainDiscipline}
+                onChange={(e) => {
+                  updateField("mainDiscipline", e.target.value);
+                  updateField("subDiscipline", "");
+                  loadSubDisciplines(e.target.value);
+                }}
+              >
+                <option value="">Select Main Discipline</option>
 
-    <option value="Structural Engineering">
-      Structural Engineering
-    </option>
-
-    <option value="Permanent Way (P-Way) / Track Engineering">
-      Permanent Way (P-Way) / Track Engineering
-    </option>
-
-    <option value="Earthworks & Earthworks Structures">
-      Earthworks & Earthworks Structures
-    </option>
-
-    <option value="Tunnelling and Geotechnical Engineering">
-      Tunnelling and Geotechnical Engineering
-    </option>
-
-    <option value="Signalling and Train Control (Command & Control)">
-      Signalling and Train Control (Command & Control)
-    </option>
-
-    <option value="Traction Power Supply & Electrification">
-      Traction Power Supply & Electrification
-    </option>
-
-    <option value="Telecommunications & SCADA">
-      Telecommunications & SCADA
-    </option>
-
-    <option value="Rolling Stock Design">
-      Rolling Stock Design
-    </option>
-
-    <option value="Mechanical, Electrical, and Plumbing (MEP)">
-      Mechanical, Electrical, and Plumbing (MEP)
-    </option>
-
-    <option value="Systems Engineering and Integration">
-      Systems Engineering and Integration
-    </option>
-  </select>
-</div>
+                {mainDisciplines.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <div>
               <label>Sub Discipline</label>
-              <input
+              <select
                 value={form.subDiscipline}
                 onChange={(e) =>
                   updateField("subDiscipline", e.target.value)
                 }
-              />
+                disabled={!form.mainDiscipline}
+              >
+                <option value="">Select Sub Discipline</option>
+
+                {subDisciplines.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
