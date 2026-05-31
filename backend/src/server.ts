@@ -21,6 +21,62 @@ const pool = new Pool({
   connectionTimeoutMillis: 30000
 });
 
+app.get("/api/setup-countries", async (_, res) => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS countries (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,
+        active BOOLEAN DEFAULT TRUE,
+        sort_order INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
+      INSERT INTO countries (name, sort_order)
+      VALUES
+      ('United Arab Emirates', 1),
+      ('United Kingdom', 2),
+      ('United States', 3),
+      ('Australia', 4),
+      ('Bangladesh', 5),
+      ('India', 6),
+      ('Sri Lanka', 7),
+      ('Saudi Arabia', 8),
+      ('Qatar', 9),
+      ('Oman', 10),
+      ('Kuwait', 11),
+      ('Bahrain', 12)
+      ON CONFLICT (name) DO NOTHING;
+    `);
+
+    res.json({ message: "Countries table created successfully" });
+  } catch (error: any) {
+    res.status(500).json({
+      error: "Country setup failed",
+      details: error.message
+    });
+  }
+});
+
+app.get("/api/countries", async (_, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT id, name
+      FROM countries
+      WHERE active = true
+      ORDER BY sort_order, name;
+    `);
+
+    res.json(result.rows);
+  } catch (error: any) {
+    res.status(500).json({
+      error: "Failed to fetch countries",
+      details: error.message
+    });
+  }
+});
 app.get("/", (_, res) => {
   res.json({ status: "Staff Resource API Running" });
 });
