@@ -272,79 +272,111 @@ export default function StaffForm() {
           </div>
         </div>
        
-        <div className="card">
-          <h2>Professional Information</h2>
+<div className="card">
+  <h2>Professional Information</h2>
 
-          <div className="grid4">
-            <div>
-              <label>Main Discipline</label>
-              <select
-                value={form.mainDiscipline}
-                onChange={(e) => {
-                  updateField("mainDiscipline", e.target.value);
-                  updateField("subDiscipline", "");
-                  loadSubDisciplines(e.target.value);
-                }}
-              >
-                <option value="">Select Main Discipline</option>
+  <div className="grid4">
+    <div>
+      <label>Main Discipline</label>
+      <select
+        value={form.mainDiscipline}
+        onChange={(e) => {
+          updateField("mainDiscipline", e.target.value);
+          updateField("subDiscipline", "");
+          loadSubDisciplines(e.target.value);
+        }}
+      >
+        <option value="">Select Main Discipline</option>
 
-                {mainDisciplines.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {mainDisciplines.map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        ))}
+      </select>
+    </div>
 
-            <div>
-              <label>Sub Discipline</label>
-              <select
-                value={form.subDiscipline}
-                onChange={(e) => updateField("subDiscipline", e.target.value)}
-                disabled={!form.mainDiscipline}
-              >
-                <option value="">Select Sub Discipline</option>
+    <div>
+      <label>Sub Discipline</label>
+      <select
+        value={form.subDiscipline}
+        onChange={(e) =>
+          updateField("subDiscipline", e.target.value)
+        }
+        disabled={!form.mainDiscipline}
+      >
+        <option value="">Select Sub Discipline</option>
 
-                {subDisciplines.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+        {subDisciplines.map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        ))}
+      </select>
+    </div>
 
-            <div>
-              <label>Grade / Level</label>
-              <input
-                value={form.grade}
-                onChange={(e) => updateField("grade", e.target.value)}
-              />
-            </div>
-             <div>
-              <label>Countries Worked</label>
+    <div>
+      <label>Grade / Level</label>
+      <input
+        value={form.grade}
+        onChange={(e) =>
+          updateField("grade", e.target.value)
+        }
+      />
+    </div>
 
-              {countriesWorked.map((country, index) => (
-              <div key={index} style={{ display: "flex", gap: "8px" }}>
-                <input
-                  list="country-list"
-                  value={country}
-                  onChange={(e) =>
-                  updateCountry(index, e.target.value)}
+    <div>
+      <label>Availability</label>
+      <select
+        value={form.availability}
+        onChange={(e) =>
+          updateField("availability", e.target.value)
+        }
+      >
+        <option value="Available">Available</option>
+        <option value="Allocated">Allocated</option>
+        <option value="On Leave">On Leave</option>
+      </select>
+    </div>
+
+    <div className="full-width">
+      <label>Countries Worked</label>
+
+      {countriesWorked.map((country, index) => (
+        <div
+          key={index}
+          style={{
+            display: "flex",
+            gap: "8px",
+            marginBottom: "8px"
+          }}
+        >
+          <input
+            list="country-list"
+            value={country}
+            onChange={(e) =>
+              updateCountry(index, e.target.value)
+            }
             placeholder="Start typing country..."
-            />
+          />
 
-            {countriesWorked.length > 1 && (
-              <button type="button" onClick={() => removeCountry(index)} >
-                ❌
-              </button>
-              )}
-            </div>
-          ))}
-
-            <button   type="button" onClick={addCountry}>
-        + Add Country
-          </button>
+          {countriesWorked.length > 1 && (
+            <button
+              type="button"
+              onClick={() => removeCountry(index)}
+            >
+              ❌
+            </button>
+          )}
         </div>
+      ))}
+
+      <button type="button" onClick={addCountry}>
+        + Add Country
+      </button>
+    </div>
+  </div>
+</div>
         <div className="card">
           <h2>Skills & Experience</h2>
 
@@ -357,7 +389,7 @@ export default function StaffForm() {
                 onChange={(e) => updateField("skills", e.target.value)}
               />
             </div>
-
+        
             <div>
               <label>Industries</label>
               <textarea
@@ -398,7 +430,6 @@ export default function StaffForm() {
                 onChange={(e) => updateField("roles", e.target.value)}
               />
             </div>
-           
           </div>
         </div>
 
