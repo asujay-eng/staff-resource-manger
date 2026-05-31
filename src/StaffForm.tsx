@@ -348,7 +348,21 @@ export default function StaffForm() {
                 onChange={(e) => updateField("phases", e.target.value)}
               />
             </div>
+            <div>
+              <label>Country</label>
+              <input
+                list="country-list"
+                value={form.country}
+                onChange={(e) => updateField("country", e.target.value)}
+                placeholder="Start typing country..."
+                  />
 
+                <datalist id="country-list">
+                {countries.map((country) => (
+                <option key={country.id} value={country.name} />
+                ))}
+                </datalist>
+              </div>
             <div>
               <label>Project Roles</label>
               <textarea
@@ -357,23 +371,7 @@ export default function StaffForm() {
                 onChange={(e) => updateField("roles", e.target.value)}
               />
             </div>
-           <div>
-              <label>Countries Worked</label>
-                <input
-                  list="country-list"
-                  value={form.countriesWorked}
-                  onChange={(e) => updateField("countriesWorked", e.target.value)}
-                  placeholder="Type countries separated by commas"
-                />
-            </div>
-            <div className="full-width">
-              <label>Projects</label>
-              <textarea
-                placeholder="Crossrail, Dubai Metro, Etihad Rail"
-                value={form.projects}
-                onChange={(e) => updateField("projects", e.target.value)}
-              />
-            </div>
+           
           </div>
         </div>
 
