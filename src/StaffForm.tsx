@@ -7,7 +7,7 @@ export default function StaffForm() {
   const [mainDisciplines, setMainDisciplines] = useState<any[]>([]);
   const [subDisciplines, setSubDisciplines] = useState<any[]>([]);
   const [countries, setCountries] = useState<any[]>([]);
-
+  const [countriesWorked, setCountriesWorked] = useState([""]);
   const [form, setForm] = useState({
     employeeNumber: "",
     calledName: "",
@@ -28,7 +28,24 @@ export default function StaffForm() {
     roles: "",
     projects: ""
       });
+    const addCountry = () => {
+    setCountriesWorked([...countriesWorked, ""]);
+  };
 
+  const updateCountry = (
+    index: number,
+    value: string
+  ) => {
+    const updated = [...countriesWorked];
+    updated[index] = value;
+    setCountriesWorked(updated);
+  };
+
+  const removeCountry = (index: number) => {
+    setCountriesWorked(
+      countriesWorked.filter((_, i) => i !== index)
+    );
+  };
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -107,7 +124,7 @@ export default function StaffForm() {
       phases: splitValues(form.phases),
       roles: splitValues(form.roles),
       projects: splitValues(form.projects),
-      countriesWorked: splitValues(form.countriesWorked)
+      countriesWorked: countriesWorked.filter(Boolean),
         };
 
     try {
@@ -304,31 +321,36 @@ export default function StaffForm() {
               />
             </div>
              <div>
-          <label>Countries Worked</label>
+          <<label>Countries Worked</label>
 
-          <input
+            {countriesWorked.map((country, index) => (
+            <div key={index} style={{ display: "flex", gap: "8px" }}>
+            <input
             list="country-list"
-            value={form.countriesWorked}
+            value={country}
             onChange={(e) =>
-            updateField("countriesWorked", e.target.value)
-              }
-          placeholder="United Arab Emirates, Saudi Arabia, United Kingdom"
-          />
-            </div>
-            <div>
-              <label>Availability</label>
-              <select
-                value={form.availability}
-                onChange={(e) => updateField("availability", e.target.value)}
-              >
-                <option value="Available">Available</option>
-                <option value="Allocated">Allocated</option>
-                <option value="On Leave">On Leave</option>
-              </select>
-            </div>
-          </div>
-        </div>
+              updateCountry(index, e.target.value)
+            }
+            placeholder="Start typing country..."
+            />
 
+            {countriesWorked.length > 1 && (
+              <button
+              type="button"
+            onClick={() => removeCountry(index)}
+            >
+                ❌
+              </button>
+          )}
+        </div>
+          ))}
+
+          <button
+          type="button"
+          onClick={addCountry}
+          >
+        + Add Country
+    </button>
         <div className="card">
           <h2>Skills & Experience</h2>
 
