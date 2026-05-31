@@ -16,6 +16,7 @@ export default function StaffForm() {
     email: "",
     mobile: "",
     country: "",
+    countriesWorked: "",
     town: "",
     mainDiscipline: "",
     subDiscipline: "",
@@ -26,7 +27,7 @@ export default function StaffForm() {
     phases: "",
     roles: "",
     projects: ""
-  });
+      });
 
   const [message, setMessage] = useState("");
 
@@ -105,8 +106,9 @@ export default function StaffForm() {
       industries: splitValues(form.industries),
       phases: splitValues(form.phases),
       roles: splitValues(form.roles),
-      projects: splitValues(form.projects)
-    };
+      projects: splitValues(form.projects),
+      countriesWorked: splitValues(form.countriesWorked)
+        };
 
     try {
       const response = await fetch(`${API_URL}/api/staff`, {
@@ -130,6 +132,7 @@ export default function StaffForm() {
           email: "",
           mobile: "",
           country: "",
+          countriesWorked: "",
           town: "",
           mainDiscipline: "",
           subDiscipline: "",
@@ -354,7 +357,15 @@ export default function StaffForm() {
                 onChange={(e) => updateField("roles", e.target.value)}
               />
             </div>
-
+           <div>
+              <label>Countries Worked</label>
+                <input
+                  list="country-list"
+                  value={form.countriesWorked}
+                  onChange={(e) => updateField("countriesWorked", e.target.value)}
+                  placeholder="Type countries separated by commas"
+                />
+            </div>
             <div className="full-width">
               <label>Projects</label>
               <textarea
