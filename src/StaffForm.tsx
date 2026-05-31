@@ -221,21 +221,26 @@ export default function StaffForm() {
             </div>
 
             <div>
-              <label>Country</label>
+          <label>Country</label>
 
-              <input
-                list="country-list"
-                value={form.country}
-                onChange={(e) => updateField("country", e.target.value)}
-                placeholder="Start typing country..."
+            <input
+            list="country-list"
+             value={form.country}
+            onChange={(e) => updateField("country", e.target.value)}
+            placeholder="Start typing country..."
+            autoComplete="off"
               />
 
-              <datalist id="country-list">
-                {countries.map((country) => (
-                  <option key={country.id} value={country.name} />
-                ))}
-              </datalist>
-            </div>
+            <datalist id="country-list">
+            {countries
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((country) => (
+            <option key={country.id} value={country.name}>
+             {country.name}
+        </option>
+          ))}
+        </datalist>
+      </div>
 
             <div>
               <label>Town</label>
