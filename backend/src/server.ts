@@ -454,6 +454,7 @@ app.post("/api/staff", async (req, res) => {
       email,
       mobile,
       country,
+      countriesWorked,
       town,
       mainDiscipline,
       subDiscipline,
@@ -477,6 +478,7 @@ app.post("/api/staff", async (req, res) => {
         mobile,
         country,
         town,
+        countries_worked,
         main_discipline,
         sub_discipline,
         grade,
@@ -488,7 +490,7 @@ app.post("/api/staff", async (req, res) => {
         projects
       )
       VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18
       )
       RETURNING *;
       `,
@@ -501,6 +503,7 @@ app.post("/api/staff", async (req, res) => {
         mobile || null,
         country || null,
         town || null,
+        countriesWorked || [],
         mainDiscipline || null,
         subDiscipline || null,
         grade || null,
